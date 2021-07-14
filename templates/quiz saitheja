@@ -1,0 +1,134 @@
+register:
+
+<body>
+	<div id='bg'>
+		<div id='newrecord' >
+    <center >
+        
+			<fieldset>
+        <header> <h1>Saitheja Bikumalla </h1> 
+            <h1>1001867581 </h1> 
+            <br>
+			<a href="/">Click Here for Home Page</a>
+             </header>
+            </div>
+		<br> <br>
+		<div id='newrecord' >
+			<center>Select one course from below:</center>
+		<form method='POST' action="/insert">
+			
+			Course <input type="text" name="c" oninvalid="alert('You must fill out input!');" required> <br><br>
+			Section <input type="text" name="s" oninvalid="alert('You must fill out input!');" required><br><br>
+			<input type="submit" >
+		
+		</form>
+	</div>
+
+	<div id='newrecord' >
+		<table id='customers'>
+			<tr>
+			  
+			   <th><b>Course</b></th>
+			   <th><b>section</b></th>
+			   <th><b>day</b></th>
+			
+			</tr>
+			{% for col in rows %}
+			<tr>
+			   <td>{{col[0]}}</td>
+			   <td>{{col[1]}}</td>
+			   <td> {{ col[2]}}</td>
+			   
+			</tr>
+			{% endfor %}
+		 </table>
+	</div>
+	</div>
+    </center> 
+</body>
+
+@app.route('/insert', methods=['POST','GET'])
+def insert():
+    
+    c=request.form['c']
+    s=request.form['s']
+    cnxx= pyodbc.Connection = pyodbc.connect('Driver={ODBC Driver 17 for SQL Server};''Server=tcp:assign1server.database.windows.net,1433;''Database=assignment1;Uid=saitheja;Pwd=9705004946S@i;')
+    crsr = cnxx.cursor()
+    querry1="INSERT INTO  s  (column1, column2) VALUES('"+c+"','"+s+"')"
+    querry="select count(*) from s"
+    crsr.execute(querry)
+    data = crsr.fetchone()
+    count=data[0]
+    print(count)
+    if(count<3):
+        crsr.execute(querry1)
+        crsr.commit()
+        return render_template("opt.html")
+    else:
+        return render_template("error.html")
+
+unregister:
+
+
+<body>
+	<div id='bg'>
+		<div id='newrecord' >
+    <center >
+        
+			<fieldset>
+        <header> <h1>Saitheja Bikumalla </h1> 
+            <h1>1001867581 </h1> 
+            <br>
+			<a href="/">Click Here for Home Page</a>
+             </header>
+            </div>
+		<br> <br>
+		<div id='newrecord' >
+			<center>Select one course from below:</center>
+		<form method='POST' action="/normalmag">
+			
+			Course <input type="text" name="c" oninvalid="alert('You must fill out input!');" required> <br><br>
+			Section <input type="text" name="s" oninvalid="alert('You must fill out input!');" required><br><br>
+			<input type="submit" >
+		
+		</form>
+	</div>
+
+	<div id='newrecord' >
+		<table id='customers'>
+			<tr>
+			  
+			   <th><b>Course</b></th>
+			   <th><b>section</b></th>
+			  
+			
+			</tr>
+			{% for col in rows %}
+			<tr>
+			   <td>{{col[0]}}</td>
+			   <td>{{col[1]}}</td>
+			   
+			   
+			</tr>
+			{% endfor %}
+		 </table>
+	</div>
+	</div>
+    </center> 
+</body>
+
+@app.route('/normalmag', methods=['POST','GET'])
+def list1():
+    
+    c=request.form['c']
+    s=request.form['s']
+    cnxx= pyodbc.Connection = pyodbc.connect('Driver={ODBC Driver 17 for SQL Server};''Server=tcp:assign1server.database.windows.net,1433;''Database=assignment1;Uid=saitheja;Pwd=9705004946S@i;')
+    crsr = cnxx.cursor()
+    querry1="DELETE FROM s WHERE column1='"+c+"' and column2='"+s+"'"
+    try:
+        crsr.execute(querry1)
+        crsr.commit()
+        cnxx.close()
+        return render_template("opt1.html")
+    except:  
+        return render_template("newrecord.html")
